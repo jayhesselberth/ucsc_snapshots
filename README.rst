@@ -17,6 +17,7 @@ Supply the hgsid and a BED file. Images will be retrieved based on the
 coordinates in the BED file and saved to the directory as:
 
     ucsc-snapshots-<hgsid>/chrom-start-end.pdf
+
     ucsc-snapshots-<hgsid>/chrom-start-end.png
 
 Warnings
