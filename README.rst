@@ -19,12 +19,14 @@ coordinates in the BED file and saved to the directory as:
 ucsc-snapshots-<hgsid>/chrom-start-end.pdf and
 ucsc-snapshots-<hgsid>/chrom-start-end.png
 
-..note: beware of multiple procs accessessing the same hgsid at
-the same time, they will affect each other's strand settings
+Warnings
+~~~~~~~
+    1. if you have many regions, you will need to run this overnight
+    (e.g. via a job submitted to the LSF night queue), otherwise UCSC could
+    throttle your connection (limit 1 request / 15 sec, 5000 requests per day)
 
-..warning: if you have many regions, you will need to run this overnight
-(e.g. via a job submitted to the LSF night queue), otherwise UCSC could
-throttle your connection (limit 1 request / 15 sec, 5000 requests per day)
+    1. Beware of multiple procs accessessing the same hgsid at
+    the same time, they will affect each other's strand settings
 
 Examples
 ========
