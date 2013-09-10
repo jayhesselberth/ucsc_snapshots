@@ -20,16 +20,18 @@ ucsc-snapshots-<hgsid>/chrom-start-end.pdf and
 ucsc-snapshots-<hgsid>/chrom-start-end.png
 
 Warnings
-~~~~~~~
-    1. if you have many regions, you will need to run this overnight
-    (e.g. via a job submitted to the LSF night queue), otherwise UCSC could
-    throttle your connection (limit 1 request / 15 sec, 5000 requests per day)
+========
 
-    1. Beware of multiple procs accessessing the same hgsid at
-    the same time, they will affect each other's strand settings
+1. if you have many regions, you will need to run this overnight
+(e.g. via a job submitted to the LSF night queue), otherwise UCSC could
+throttle your connection (limit 1 request / 15 sec, 5000 requests per day)
+
+1. Beware of multiple procs accessessing the same hgsid at
+the same time, they will affect each other's strand settings
 
 Examples
 ========
+
 The simplest case, just fetch images:
 
     ucsc_snapshots BED3+ SESSIONID
@@ -45,5 +47,5 @@ Add an annotation to the output directory:
 
 Installation
 ============
-ucsc_snapsnots requires ``ucscsession`` and ``pybedtools``, which can be
-installed with ``pip install ucscsession`` ``easy_install ucscsession``.
+ucsc_snapsnots requires ``ucscsession``, ``path.py`` and ``pybedtools``, which can be
+installed with e.g. ``pip install ucscsession`` or ``easy_install ucscsession``.
