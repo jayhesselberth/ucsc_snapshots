@@ -1,11 +1,11 @@
 #! /usr/bin/env python
 
 ''' ucsc_snapshots: retrieve pictures from UCSC Genome Browser based on
-coordinates specified from BED3+ file.
+coordinates specified from BED3+ file and a session ID (hgsid).
 
 UCSC Genome Browser should be set up with tracks prior to using the
-utility. This includes all track settings, sizes etc. Once these are
-setup, you can load the page source and identify the hgsid by
+utility and saved as a session. This includes all track settings, sizes etc.
+Once these are setup, you can load the page source and identify the hgsid by
 searching for "hgsid="
 
 Supply the hgsid and a BED file. Images will be retrieved based on the
@@ -14,9 +14,13 @@ coordinates in the BED file and saved to the directory as:
 ucsc-snapshots-<hgsid>/chrom-start-end.pdf and
 ucsc-snapshots-<hgsid>/chrom-start-end.png
 
-WARNING: if you have many regions, you will need to run this overnight
+..note: beware of multiple procs accessessing the same hgsid at
+the same time, they will affect each other's strand settings
+
+..warning: if you have many regions, you will need to run this overnight
 (e.g. via a job submitted to the LSF night queue), otherwise UCSC will
 throttle your connection (limit 1 request / 15 sec, 5000 requests per day)
+
 '''
 
 # TODO:
@@ -32,10 +36,10 @@ from path import path
 
 __author__ = 'Jay Hesselberth'
 __contact__ = 'jay.hesselberth@gmail.com'
-__version__ = '$Revision: 543 $'
+__version__ = '$Revision: 546 $'
 
-def ucsc_snapshots(bedfilename, session_id, rev_display, img_types,
-                   no_delay, verbose):
+def ucsc_snapshots(bedfilename, session_id, rev_display, dir_annots,
+                   img_types, no_delay, verbose):
 
     ucscsession.settings.hgsid = session_id
     session = Session(rev_display, no_delay, verbose)
@@ -52,7 +56,7 @@ def ucsc_snapshots(bedfilename, session_id, rev_display, img_types,
 
             filename = getfilename(session_id, position,
                                    name=region.name, score=region.score,
-                                   ext=imgtype)
+                                   annots=dir_annots, ext=imgtype)
             session.write_image(imgtype=imgtype, filename=filename,
                                 strand=region.strand)
 
@@ -152,7 +156,10 @@ class Session(ucscsession.session._UCSCSession):
         ''' flip display for such that all genes (pos and neg strands) are
         shown 5'->3'
         
-        adds hgt.toggleRevCmplDisp to CGI payload if required'''
+        adds hgt.toggleRevCmplDisp to CGI payload if required
+
+        ..note: beware of multiple procs accessessing the same hgsid at
+        the same time, they will affect each other's strand settings '''
 
         # the CGI var is a true toggle so must be flipped back to e.g.
         # pos strand genes after a neg strand gene is retrieved and vice
@@ -188,7 +195,7 @@ class Session(ucscsession.session._UCSCSession):
         else:
             return True
 
-def getfilename(session_id, position, name, score, ext='pdf'):
+def getfilename(session_id, position, name, score, annots, ext='pdf'):
     ''' generate a filename for the image output.
     
     creates directory if it does not exist.
@@ -197,7 +204,13 @@ def getfilename(session_id, position, name, score, ext='pdf'):
     if name and score are specified, filename is:
     <name>-<score>-<pos>.pdf
     '''
-    imgdir = path('ucsc-snapshots-hgsid-%s' % session_id)
+    imgdir = 'ucsc-snapshots-hgsid-%s' % session_id
+    
+    if annots:
+        for key, val in annots:
+            imgdir += '-%s-%s' % (key, val)
+
+    imgdir = path(imgdir)
 
     if not imgdir.exists():
         imgdir.mkdir()
@@ -231,6 +244,10 @@ def parse_options(args):
         default=[], help="image types to write. "
                             "(default: PNG, PDF)")
 
+    parser.add_option("--dir-annotations", action="append",
+        default=[], help="additional key=value pairs for annotating "
+                          "output directory. (default: None)")
+
     parser.add_option("--no-delay", action="store_true",
         default=False, help="no delay between requests. for debugging "
                             "only. "
@@ -247,7 +264,7 @@ def parse_options(args):
 
     if len(args) < 2:
         parser.error("specify BED filename and UCSC session ID")
- 
+
     if len(options.img_types) == 0:
         options.img_types.extend(['PDF','PNG'])
 
@@ -257,9 +274,14 @@ def main(args=sys.argv[1:]):
     options, args = parse_options(args)
     bedfilename = args[0]
     sessionid = args[1]
+
+    if options.dir_annotations:
+        annots = [(i.split('=')) for i in options.dir_annotations]
+
     kwargs = {'verbose':options.verbose,
               'img_types':options.img_types,
               'rev_display':options.reverse_display,
+              'dir_annots':annots,
               'no_delay':options.no_delay}
     return ucsc_snapshots(bedfilename, sessionid, **kwargs)
 
