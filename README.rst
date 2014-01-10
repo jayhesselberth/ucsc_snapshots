@@ -49,7 +49,7 @@ Add an annotation to the output directory
 
 Output PNG files only (default is PDF and PNG):
 
-    ucsc_snapshots BED3+ SESSIONID --imt-types png
+    ucsc_snapshots BED3+ SESSIONID --img-types png
 
 Installation
 ============
