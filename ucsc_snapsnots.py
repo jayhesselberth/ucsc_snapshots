@@ -17,7 +17,8 @@ ucsc-snapshots-<hgsid>/chrom-start-end.png
 ..note: beware of multiple procs accessessing the same hgsid at
 the same time, they will affect each other's strand settings
 
-..warning: if you have many regions, you will need to run this overnight
+..warning::
+if you have many regions, you will need to run this overnight
 (e.g. via a job submitted to the LSF night queue), otherwise UCSC will
 throttle your connection (limit 1 request / 15 sec, 5000 requests per day)
 
