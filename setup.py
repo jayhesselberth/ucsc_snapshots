@@ -7,7 +7,7 @@ from setuptools import setup
 
 entry_points = """
 [console_scripts]
-ucsc_snapshots = ucsc_snapshots:main
+ucsc_snapshots = ucsc_snapshots.ucsc_snapshots:main
 """
 setup(name='ucsc_snapshots',
       version='0.1.4',
