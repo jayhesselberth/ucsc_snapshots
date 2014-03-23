@@ -1,3 +1,4 @@
+
 ********************************
   ucsc_snapshots documentation
 ********************************
@@ -18,7 +19,7 @@ etc.  Once these are setup, you can load the page source and identify the
 hgsid by searching for "hgsid="
 
 Supply the hgsid and a BED file. Images will be retrieved based on the
-coordinates in the BED file and saved to the directory as:
+coordinates in the BED file and saved to the directory as::
 
     ucsc-snapshots-<hgsid>/chrom-start-end.pdf
 
@@ -27,31 +28,31 @@ coordinates in the BED file and saved to the directory as:
 Warnings
 ========
 
-1. if you have many regions, you may need to run this overnight
-(e.g. via a job submitted to the LSF night queue), otherwise UCSC could
-throttle your connection (limit 1 request / 15 sec, 5000 requests per day)
+if you have many regions, you may need to run this overnight (e.g. via a
+job submitted to the LSF night queue), otherwise UCSC could throttle your
+connection (limit 1 request / 15 sec, 5000 requests per day)
 
-1. Beware of multiple procs accessessing the same hgsid at
-the same time, they will affect each other's strand settings
+Beware of multiple procs accessessing the same hgsid at the same time,
+they will affect each other's strand settings
 
 Examples
 ========
 
-The simplest case, just fetch images:
+The simplest case, just fetch images::
 
     ucsc_snapshots BED3+ SESSIONID
 
 Retrieve snapshots maintaining the display with 5'->3' orientation using
-the strand field from the BED file:
+the strand field from the BED file::
 
     ucsc_snapshots BED3+ SESSIONID --reverse-display
 
 Add an annotation to the output directory
-(directory becomes ucsc-snapshots-<hgsid>-annotation/):
+(directory becomes ucsc-snapshots-<hgsid>-annotation/)::
 
     ucsc_snapshots BED3+ SESSIONID --dir-annotation celltype=MCF7
 
-Output PNG files only (default is PDF and PNG):
+Output PNG files only (default is PDF and PNG)::
 
     ucsc_snapshots BED3+ SESSIONID --img-types png
 
