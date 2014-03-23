@@ -1,6 +1,5 @@
 .DS_Store
 .svn
-*.egg-info/*A
+*.egg-info/*
 *.egg
 *.tar.gz
-
