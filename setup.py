@@ -5,6 +5,10 @@ ez_setup.use_setuptools()
 
 from setuptools import setup
 
+entry_points = """
+[console_scripts]
+ucsc_snapshots = ucsc_snapshots:main
+"""
 setup(name='ucsc_snapshots',
       version='0.1.4',
       description='fetch images from the UCSC genome browser using BED regions',
@@ -13,7 +17,7 @@ setup(name='ucsc_snapshots',
       license='MIT',
       url='https://github.com/jayhesselberth/ucsc_snapshots',
       install_requires=['ucscsession', 'pybedtools', 'path'],
-      scripts=['ucsc_snapshots'],
+      entry_points=entry_points,
       long_description=open('README.rst').read(),
       classifiers=['License :: OSI Approved :: MIT License'],
 )
