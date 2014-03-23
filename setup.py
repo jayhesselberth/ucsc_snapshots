@@ -5,15 +5,15 @@ ez_setup.use_setuptools()
 
 from setuptools import setup
 
-setup(name='ucsctools',
-      version='0.1.3',
-      description='useful tools for the UCSC genome browser',
+setup(name='ucsc_snapshots',
+      version='0.1.4',
+      description='fetch images from the UCSC genome browser using BED regions',
       author='Jay Hesselberth',
       author_email='jay.hesselberth@gmail.com',
       license='MIT',
-      url='https://github.com/jayhesselberth/ucsctools',
+      url='https://github.com/jayhesselberth/ucsc_snapshots',
       install_requires=['ucscsession', 'pybedtools', 'path'],
       scripts=['ucsc_snapshots'],
-      long_description=open('README.md').read(),
+      long_description=open('README.rst').read(),
       classifiers=['License :: OSI Approved :: MIT License'],
 )

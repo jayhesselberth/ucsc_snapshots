@@ -1,11 +1,16 @@
 #! /usr/bin/env python
 
-''' ucsc_snapshots: retrieve pictures from the UCSC Genome Browser based on
-coordinates specified from BED3+ file and a session ID (hgsid).
+'''
+==================
+  ucsc_snapshots
+==================
+
+retrieve pictures from the UCSC Genome Browser based on coordinates
+specified from BED3+ file and a session ID (hgsid).
 
 UCSC Genome Browser should be set up with tracks prior to using the
-utility and saved as a session. This includes all track settings, sizes etc.
-Once these are setup, load the page source and identify the hgsid by
+utility and saved as a session. This includes all track settings, sizes
+etc.  Once these are setup, load the page source and identify the hgsid by
 searching for "hgsid="
 
 Supply the hgsid and a BED file. Images will be retrieved based on the
@@ -14,16 +19,17 @@ coordinates in the BED file and saved to the directory as::
     ucsc-snapshots-<hgsid>/chrom-start-end.pdf
     ucsc-snapshots-<hgsid>/chrom-start-end.png
 
-..note::
+.. note::
 
     beware of multiple procs accessessing the same hgsid at
     the same time, they will affect each other's strand settings
 
-..warning::
+.. warning::
 
-    if you have many regions, you will need to run this overnight
-    (e.g. via a job submitted to the LSF night queue), otherwise UCSC will
-    throttle your connection (limit 1 request / 15 sec, 5000 requests per day)
+    if you have many regions, you will need to run this overnight (e.g.
+    via a job submitted to the LSF night queue), otherwise UCSC will
+    throttle your connection (limit 1 request / 15 sec, 5000 requests per
+    day)
 
 '''
 
@@ -58,6 +64,7 @@ def ucsc_snapshots(bedfilename, session_id, rev_display, dir_annots,
             filename = getfilename(session_id, position,
                                    name=region.name, score=region.score,
                                    annots=dir_annots, ext=imgtype)
+
             session.write_image(imgtype=imgtype, filename=filename,
                                 strand=region.strand)
 
@@ -84,10 +91,21 @@ class Session(ucscsession.session._UCSCSession):
             self._SLEEP = 15
 
     def write_image(self, imgtype, filename, strand):
-        ''' wrapper for image generation. writes requested content to
+        '''
+        wrapper for image generation. writes requested content to
         filename.
         
-        only PDF and PNG are currently supported.'''
+        only PDF and PNG are currently supported.
+        
+        Args:
+            imgtype (str): pdf or png
+            filename (str): name of file to write
+            strand (str): optional strand argument
+
+        Returns:
+            Nothing
+        '''
+
         # XXX could add more image capability by converting retrieved png
         # files to jpeg, tif etc.
         if imgtype.lower() == 'pdf':
@@ -108,7 +126,11 @@ class Session(ucscsession.session._UCSCSession):
         retrieve PDF of the current browser view for currently set
         position.
 
-        returns: pdf content
+        Args:
+            strand (str)
+
+        Returns:
+            pdf content (str)
         """
         payload = {'hgt.psOutput':'on'}
 
@@ -129,8 +151,12 @@ class Session(ucscsession.session._UCSCSession):
         """ 
         retrieve merged PNG of the current browser view for currently set
         position.
+        
+        Args:
+            strand (str)
 
-        returns: png content
+        Returns:
+            png content (str)
         """
         # these CGI settings ensure the browser returns a single, merged
         # PNG for the viewport
@@ -154,13 +180,22 @@ class Session(ucscsession.session._UCSCSession):
         return content
 
     def _flip_display(self, strand, payload):
-        ''' flip display for such that all genes (pos and neg strands) are
+        '''
+        flip display for such that all genes (pos and neg strands) are
         shown 5'->3'
         
         adds hgt.toggleRevCmplDisp to CGI payload if required
 
-        ..note: beware of multiple procs accessessing the same hgsid at
-        the same time, they will affect each other's strand settings '''
+        beware of multiple procs accessessing the same hgsid at the
+        same time, they will affect each other's strand settings
+
+        Args:
+            strand (str)
+            payload (dict): updated payload with toggle key
+
+        Returns:
+            payload (dict)
+        '''
 
         # the CGI var is a true toggle so must be flipped back to e.g.
         # pos strand genes after a neg strand gene is retrieved and vice
@@ -177,9 +212,15 @@ class Session(ucscsession.session._UCSCSession):
         return payload
 
     def _find_flipped_state(self):
-        ''' determine whether the display is currently flipped.
-        
-        returns: bool'''
+        '''
+        Determine whether the display is currently flipped.
+
+        Args:
+            None
+
+        Returns:
+            bool (boot): Whether state is flipped
+        '''
         cart_info = self.cart_info()
         db = cart_info['db']
         comp_key = 'hgt.revCmplDisp_%s' % db
@@ -197,19 +238,23 @@ class Session(ucscsession.session._UCSCSession):
             return True
 
 def getfilename(session_id, position, name, score, annots, ext='pdf'):
-    ''' generate a filename for the image output.
-    
-    creates directory if it does not exist.
-    
-    position is required.
-    if name and score are specified, filename is:
-    <name>-<score>-<pos>.pdf
     '''
+    Renerate a filename for the image output. creates directory if it does
+    not exist.
+    
+    Args:
+        position (str): e.g. chr1:1-100)
+        name (str): gene name
+        score (str) score
+        annots (str): annots
+
+    Returns:
+        filename (str): <name>-<score>-<pos>.pdf
+    '''
+
     imgdir = 'ucsc-snapshots-hgsid-%s' % session_id
     
-    if annots:
-        for key, val in annots:
-            imgdir += '-%s-%s' % (key, val)
+    if annots: for key, val in annots: imgdir += '-%s-%s' % (key, val)
 
     imgdir = path(imgdir)
 

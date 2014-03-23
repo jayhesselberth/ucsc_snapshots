@@ -1,17 +1,21 @@
-============================
-ucsc_snapshots documentation
-============================
+********************************
+  ucsc_snapshots documentation
+********************************
 
 :Author: Jay Hesselberth <jay dot hesselberth at gmail dot com>
 :Organization: University of Colorado School of Medicine
+:Version: |version|
+
+Summary
+=======
 
 ucsc_snapshots retrieves pictures from UCSC Genome Browser based on
 coordinates specified from BED3+ file and a session ID (hgsid).
 
 UCSC Genome Browser should be set up with tracks prior to using the
-utility and saved as a session. This includes all track settings, sizes etc.
-Once these are setup, you can load the page source and identify the hgsid by
-searching for "hgsid="
+utility and saved as a session. This includes all track settings, sizes
+etc.  Once these are setup, you can load the page source and identify the
+hgsid by searching for "hgsid="
 
 Supply the hgsid and a BED file. Images will be retrieved based on the
 coordinates in the BED file and saved to the directory as:
@@ -53,5 +57,10 @@ Output PNG files only (default is PDF and PNG):
 
 Installation
 ============
-ucsc_snapsnots requires ``ucscsession``, ``path.py`` and ``pybedtools``, which can be
-installed with e.g. ``pip install ucscsession`` or ``easy_install ucscsession``.
+
+The following requirements can be installed with ``pip``:
+
+ + ``ucscsession``
+ + ``path.py``
+ + ``pybedtools``
+
