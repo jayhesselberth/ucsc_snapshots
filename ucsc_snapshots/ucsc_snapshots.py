@@ -228,8 +228,9 @@ class Session(ucscsession.session._UCSCSession):
         try:
             state = cart_info[comp_key]
         except KeyError:
-            msg = ">> flipped state not avail in %s" % comp_key
-            raise KeyError, msg
+            msg = ">> forcing display to + strand ... " 
+            self._flip_display(strand = '+', payload = {})
+            state = 0
 
         # possible vals are 0 and 1
         if int(state) == 0:
@@ -239,7 +240,7 @@ class Session(ucscsession.session._UCSCSession):
 
 def getfilename(session_id, position, name, score, annots, ext='pdf'):
     '''
-    Renerate a filename for the image output. creates directory if it does
+    Generate a filename for the image output. creates directory if it does
     not exist.
     
     Args:
@@ -254,7 +255,9 @@ def getfilename(session_id, position, name, score, annots, ext='pdf'):
 
     imgdir = 'ucsc-snapshots-hgsid-%s' % session_id
     
-    if annots: for key, val in annots: imgdir += '-%s-%s' % (key, val)
+    if annots:
+        for key, val in annots:
+            imgdir += '-%s-%s' % (key, val)
 
     imgdir = path(imgdir)
 
@@ -265,9 +268,9 @@ def getfilename(session_id, position, name, score, annots, ext='pdf'):
     pos = position.replace(':','-')
 
     fname = pos
-    if score != '.':
+    if score and score != '.':
         fname = '%s-%s' % (score, fname)
-    if name != '.':
+    if name and name != '.':
         fname = '%s-%s' % (name, fname)
 
     imgfilename = path('%s.%s' % (fname, ext.lower()))
@@ -323,6 +326,8 @@ def main(args=sys.argv[1:]):
 
     if options.dir_annotations:
         annots = [(i.split('=')) for i in options.dir_annotations]
+    else:
+        annots = []
 
     kwargs = {'verbose':options.verbose,
               'img_types':options.img_types,
