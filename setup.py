@@ -18,6 +18,6 @@ setup(name='ucsc_snapshots',
       url='https://github.com/jayhesselberth/ucsc_snapshots',
       install_requires=['pybedtools', 'path.py', 'ucscsession'],
       entry_points=entry_points,
-      long_description=open('README.md').read(),
+      long_description=open('README').read(),
       classifiers=['License :: OSI Approved :: MIT License'],
 )
