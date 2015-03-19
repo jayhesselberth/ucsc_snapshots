@@ -21,11 +21,10 @@ coordinates in the BED file and saved to the directory as:
 
 ## Warnings
 
-if you have many regions, you may need to run this overnight (e.g. via a
-job submitted to the LSF night queue), otherwise UCSC could throttle your
-connection (limit 1 request / 15 sec, 5000 requests per day)
+if you have many regions, you may need to run this overnight as thet
+UCSC limit s 1 request per 15 sec and 5000 requests per day.
 
-Beware of multiple procs accessessing the same hgsid at the same time,
+**Beware** of multiple procs accessessing the same hgsid at the same time,
 they will affect each other's strand settings
 
 ## Examples
@@ -50,11 +49,5 @@ Output PNG files only (default is PDF and PNG):
 
 ## Installation
 
-The following requirements can be installed with `pip`:
-
-+ `ucscsession`: currently requires the github development version.
-
-+ `path.py`
-
-+ `pybedtools`
+    pip install ucsc_snapshots
 
