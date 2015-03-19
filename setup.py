@@ -10,7 +10,7 @@ entry_points = """
 ucsc_snapshots = ucsc_snapshots.ucsc_snapshots:main
 """
 setup(name='ucsc_snapshots',
-      version='0.1.5',
+      version='0.1.6',
       description='fetch images from the UCSC genome browser using BED regions',
       author='Jay Hesselberth',
       author_email='jay.hesselberth@gmail.com',
