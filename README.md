@@ -1,6 +1,6 @@
 # ucsc\_snapshots documentation
 
-**Version**: 
+**Version**: 0.1.5
 
 ## Summary
 
