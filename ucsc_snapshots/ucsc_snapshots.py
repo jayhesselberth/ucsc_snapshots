@@ -43,7 +43,7 @@ from path import path
 
 __author__ = 'Jay Hesselberth'
 __contact__ = 'jay.hesselberth@gmail.com'
-__version__ = '$Revision: 546 $'
+__version__ = '0.1.8'
 
 def ucsc_snapshots(bedfilename, session_id, rev_display, dir_annots,
                    img_types, no_delay, verbose):
@@ -219,7 +219,7 @@ class Session(ucscsession.session._UCSCSession):
             None
 
         Returns:
-            bool (boot): Whether state is flipped
+            bool: Whether state is flipped
         '''
         cart_info = self.cart_info()
         db = cart_info['db']

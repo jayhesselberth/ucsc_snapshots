@@ -10,13 +10,14 @@ entry_points = """
 ucsc_snapshots = ucsc_snapshots.ucsc_snapshots:main
 """
 setup(name='ucsc_snapshots',
-      version='0.1.6',
+      version='0.1.8',
       description='fetch images from the UCSC genome browser using BED regions',
       author='Jay Hesselberth',
       author_email='jay.hesselberth@gmail.com',
-      license='MIT',
+      license='CC0',
       url='https://github.com/jayhesselberth/ucsc_snapshots',
-      install_requires=['pybedtools', 'path.py', 'ucscsession'],
+      install_requires=['pybedtools', 'path.py', 'ucscsession',
+                        'requests','beautifulsoup4','mechanize'],
       entry_points=entry_points,
       long_description=open('README').read(),
       classifiers=['License :: OSI Approved :: MIT License'],
